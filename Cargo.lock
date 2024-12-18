@@ -1979,6 +1979,7 @@ dependencies = [
  "socks5-proto",
  "socks5-server",
  "thiserror",
+ "tikv-jemallocator",
  "tokio",
  "tokio-util",
  "tuic",

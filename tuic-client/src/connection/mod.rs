@@ -64,7 +64,11 @@ impl Connection {
 
             impl SkipServerVerification {
                 fn new() -> Arc<Self> {
-                    Arc::new(Self(Arc::new(rustls::crypto::ring::default_provider())))
+                    Arc::new(Self(
+                        rustls::crypto::CryptoProvider::get_default()
+                            .expect("Crypto not found")
+                            .clone(),
+                    ))
                 }
             }
 

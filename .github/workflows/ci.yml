@@ -43,25 +43,29 @@ jobs:
             target: x86_64-unknown-linux-gnu
             release-name: x86_64-linux
             cross: true
+            extra-args: "--features jemallocator"
           - os: ubuntu-latest
             target: i686-unknown-linux-gnu
             release-name: i686-linux
             cross: true
+            extra-args: "--features jemallocator"
           # Linux x86 musl
           - os: ubuntu-latest
             target: x86_64-unknown-linux-musl
             release-name: x86_64-linux-musl
             cross: true
+            extra-args: "--features jemallocator"
           - os: ubuntu-latest
             target: i686-unknown-linux-musl
             release-name: i686-linux-musl
             cross: true
-            extra-args: "--no-default-features --features ring"
+            extra-args: "--no-default-features --features ring,jemallocator"
           # Linux arm
           - os: ubuntu-latest
             target: aarch64-unknown-linux-gnu
             release-name: aarch64-linux
             cross: true
+            extra-args: "--features jemallocator"
           - os: ubuntu-latest
             target: armv7-unknown-linux-gnueabi
             release-name: armv7-linux
@@ -77,47 +81,47 @@ jobs:
             target: aarch64-unknown-linux-musl
             release-name: aarch64-linux-musl
             cross: true
+            extra-args: "--features jemallocator"
           - os: ubuntu-latest
             target: armv7-unknown-linux-musleabi
             release-name: armv7-linux-musl
             cross: true
-            extra-args: "--no-default-features --features ring"
+            extra-args: "--no-default-features --features ring,jemallocator"
           - os: ubuntu-latest
             target: armv7-unknown-linux-musleabihf
             release-name: armv7-linux-muslhf
             cross: true
-            extra-args: "--no-default-features --features ring"
+            extra-args: "--no-default-features --features ring,jemallocator"
           # Windows
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             release-name: x86_64-windows
             cross: false
             postfix: ".exe"
-            extra-args: "--no-default-features --features aws-lc-rs"
           - os: windows-latest
             target: i686-pc-windows-msvc
             release-name: i686-windows
             cross: false
             postfix: ".exe"
-            extra-args: "--no-default-features --features ring"
+            extra-args: "--features ring"
           # Windows Arm
           - os: windows-latest
             target: aarch64-pc-windows-msvc
             release-name: aarch64-windows
             cross: false
             postfix: ".exe"
-            extra-args: "--no-default-features --features aws-lc-rs"
-
           # MacOSX
           - os: macos-13
             target: x86_64-apple-darwin
             release-name: x86_64-darwin
             cross: false
-
+            extra-args: "--features jemallocator"
+            
           - os: macos-14
             target: aarch64-apple-darwin
             release-name: aarch64-darwin
             cross: false
+            extra-args: "--features jemallocator"
 
           # FreeBSD
           # - os: ubuntu-latest
@@ -195,7 +199,16 @@ jobs:
         with:
           use-cross: ${{ matrix.cross }}
           command: build
-          args: --release --target ${{ matrix.target }} ${{ matrix.extra-args }}
+          args: --package ${{ env.PACKAGE }} --release --target ${{ matrix.target }} ${{ matrix.extra-args }}
+        env:
+          RUSTFLAGS: ${{ matrix.rustflags }}
+          
+      - name: Cargo build
+        uses: clechasseur/rs-cargo@v2
+        with:
+          use-cross: ${{ matrix.cross }}
+          command: build
+          args: --package ${{ env.PACKAGE2 }} --release --target ${{ matrix.target }} ${{ matrix.extra-args }}
         env:
           RUSTFLAGS: ${{ matrix.rustflags }}
 

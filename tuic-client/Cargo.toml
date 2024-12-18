@@ -11,6 +11,12 @@ readme.workspace = true
 license.workspace = true
 repository.workspace = true
 
+[features]
+default = ["aws-lc-rs"]
+ring = ["rustls/ring", "quinn/rustls-ring"]
+aws-lc-rs = ["rustls/aws-lc-rs", "quinn/rustls-aws-lc-rs"]
+jemallocator = ["tikv-jemallocator"]
+
 [dependencies]
 bytes = { version = "1", default-features = false, features = ["std"] }
 
@@ -29,7 +35,7 @@ socks5-server = { version = "0.8", default-features = false }
 uuid = { version = "1", default-features = false, features = ["serde", "std"] }
 
 # QUIC
-quinn = { version = "0.11", default-features = false, features = ["runtime-tokio", "rustls", "log"] }
+quinn = { version = "0.11", default-features = false, features = ["runtime-tokio","log"] }
 
 # TUIC
 tuic = { path = "../tuic", default-features = false }
@@ -49,3 +55,5 @@ rustls-pemfile = { version = "2", default-features = false, features = ["std"] }
 # Error-handling
 thiserror = { version = "2", default-features = false }
 anyhow = "1"
+
+tikv-jemallocator = { version = "0.6", optional = true }
